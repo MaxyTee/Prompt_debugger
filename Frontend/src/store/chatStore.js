@@ -1,7 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "artistic-beauty-production.up.railway.app/api";
 
 export const userChatStore = create((set, get) => ({
   chats: [],
