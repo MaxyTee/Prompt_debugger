@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-const API_URL = "artistic-beauty-production.up.railway.app/api/auth";
+const API_URL = "https://artistic-beauty-production.up.railway.app/api/auth";
 
 axios.defaults.withCredentials = true;
 
