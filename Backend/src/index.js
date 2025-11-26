@@ -21,6 +21,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/chatList", chatsRoutes);
 app.use("/api/messages", messageRoutes);
 
+app.get("/", (req, res)=>{
+  res.send("Backend Sever is working")
+})
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   connectDB();
