@@ -9,7 +9,7 @@ export const useAIStore = create((set) => ({
   debugPrompt: async (input) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post("http://localhost:5000/api/prompt", {
+      const response = await axios.post("artistic-beauty-production.up.railway.app/api/prompt", {
         prompt: input,
       });
 
