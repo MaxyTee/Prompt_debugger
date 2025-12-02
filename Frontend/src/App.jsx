@@ -6,11 +6,11 @@ import VerifyOtp from "./Pages/AuthPage/VerifyOtp";
 import ChangePassword from "./Pages/AuthPage/ChangePassword";
 import Chats from "./Pages/Chats";
 import { useAuthStore } from "./store/authStore";
-import { Children, useEffect } from "react";
+import { useEffect } from "react";
 import ResetPassword from "./Pages/AuthPage/ResetPassword";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   if (!isAuthenticated) return <Navigate to="/login" />;
   return children;

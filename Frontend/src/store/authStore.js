@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
-
-const API_URL = `${import.meta.env.VITE_API_URL}/auth`;
+// const API_URL = "https://artistic-beauty-production.up.railway.app/api/auth";
+const API_URL = `${import.meta.VITE_API_URL}/auth`;
 
 axios.defaults.withCredentials = true;
 
