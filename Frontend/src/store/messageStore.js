@@ -1,7 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
 
-const API_URL = `${import.meta.VITE_API_URL}`;
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 export const useMessageStore = create((set, get) => ({
   message: null,
   messagesDB: [],
