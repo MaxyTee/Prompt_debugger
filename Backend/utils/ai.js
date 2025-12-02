@@ -15,9 +15,6 @@ const debugSchema = z.object({
 
 export const debug_prompt = async (prompt) => {
   try {
-    // const { prompt } = req.body;
-    console.log(prompt);
-
     if (!prompt) {
       throw Error("Prompt is required");
     }
@@ -30,8 +27,6 @@ export const debug_prompt = async (prompt) => {
         responseJsonSchema: zodToJsonSchema(debugSchema),
       },
     });
-
-    // console.log(response);
 
     const parsed = debugSchema.parse(JSON.parse(response.text));
     return parsed;

@@ -32,6 +32,9 @@ export const createMessage = async (req, res) => {
     if (chat.title == "New Conversation") {
       chat.title = `analyse - ${content}`;
     }
+    if (Date.now() > chat.updatedAt) {
+      chat.updatedAt = Date.now();
+    }
     await chat.save();
 
     res.status(201).json({

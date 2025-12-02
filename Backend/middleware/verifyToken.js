@@ -12,7 +12,7 @@ export const verifyToken = (req, res, next) => {
       .json({ success: false, message: "Unauthorized - no token provided" });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRETE);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded) {
       return res
         .status(401)

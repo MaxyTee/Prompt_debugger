@@ -5,28 +5,32 @@ import Signup from "./Pages/AuthPage/Signup";
 import VerifyOtp from "./Pages/AuthPage/VerifyOtp";
 import ChangePassword from "./Pages/AuthPage/ChangePassword";
 import Chats from "./Pages/Chats";
-import { Children } from "react";
 import { useAuthStore } from "./store/authStore";
-import { useEffect } from "react";
+import { Children, useEffect } from "react";
 import ResetPassword from "./Pages/AuthPage/ResetPassword";
 
-const RedirectedAuthenticatedUser = ({ Children }) => {
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  return children;
+};
+
+const RedirectedAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (isAuthenticated && user.isVerified) {
     return <Navigate to="/chats" />;
   }
-
-  return Children;
+  return children;
 };
 
 function App() {
-  const { isCheckingAuth, checkAuth } = useAuthStore();
+  const { checkAuth } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  // if (isCheckingAuth) return <div>Loading...</div>;
   return (
     <BrowserRouter>
       <Routes>
@@ -34,23 +38,39 @@ function App() {
         <Route
           path="/login"
           element={
-            // <RedirectedAuthenticatedUser>
-            <Login />
-            // </RedirectedAuthenticatedUser>
+            <RedirectedAuthenticatedUser>
+              <Login />
+            </RedirectedAuthenticatedUser>
           }
         />
         <Route
           path="/signup"
           element={
-            // <RedirectedAuthenticatedUser>
-            <Signup />
-            // </RedirectedAuthenticatedUser>
+            <RedirectedAuthenticatedUser>
+              <Signup />
+            </RedirectedAuthenticatedUser>
           }
         />
         <Route path="/verifyOtp" element={<VerifyOtp />} />
         <Route path="/change-password/:token" element={<ChangePassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
-        <Route path="/chats" element={<Chats />} />
+
+        <Route
+          path="/chats"
+          element={
+            <ProtectedRoute>
+              <Chats />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chats/:chatId"
+          element={
+            <ProtectedRoute>
+              <Chats />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

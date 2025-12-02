@@ -1,8 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
 
-const API_URL = "http://localhost:5000/api";
-
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 export const userChatStore = create((set, get) => ({
   chats: [],
   chat: null,
@@ -23,20 +22,21 @@ export const userChatStore = create((set, get) => ({
     }
   },
 
-  postChat: async (title, userId) => {
+  postChat: async (payload) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/chatList/chat`, {
-        title,
-        userId,
-      });
+      const response = await axios.post(`${API_URL}/chatList/chat`, payload);
       if (!response.data.success) {
         set({ isLoading: false, error: response.data.message });
       }
 
       set({ chat: response.data.chat, isLoading: false, error: null });
       const { getChats } = get();
-      await getChats(userId);
+      await getChats(payload.userId);
+      return {
+        success: true,
+        chatId: response.data.chat._id,
+      };
     } catch (error) {
       set({
         error: error.response?.data?.message || "Error posting chat",

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 export const useMessageStore = create((set, get) => ({
   message: null,
   messagesDB: [],
@@ -33,6 +33,7 @@ export const useMessageStore = create((set, get) => ({
   },
 
   createMessage: async (payload) => {
+    console.log("sending");
     set({ isLoading: true, error: null });
     try {
       const response = await axios.post(`${API_URL}/messages/message`, payload);

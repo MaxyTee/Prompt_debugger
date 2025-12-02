@@ -1,23 +1,40 @@
 import { Chats } from "../models/chats.model.js";
-import { messageSchema } from "../models/message.model.js";
-
+import { Message, messageSchema } from "../models/message.model.js";
+import { debug_prompt } from "../utils/ai.js";
 export const postChat = async (req, res) => {
-  const { title, userId } = req.body;
+  const { content, userId } = req.body;
+  console.log(req.body);
   try {
-    if (!title || !userId) {
+    if (!content || !userId) {
+      console.log(content, userId);
       return res
         .status(400)
         .json({ success: false, message: "requires UserId and title" });
     }
-
+    const title = `New Conversation`;
     const chat = new Chats({
       title,
       userId,
     });
 
     await chat.save();
+    //Saving message
+    const chatId = chat._id;
+    const newMessage = new Message({
+      chatId,
+      role: "user",
+      message_content: content,
+    });
+    const ai_response = await debug_prompt(content);
+    const aiMessage = new Message({
+      message_content: ai_response,
+      role: "assistant",
+      chatId,
+    });
 
-    res.status(201).json({
+    await newMessage.save();
+    await aiMessage.save();
+    return res.status(201).json({
       success: true,
       message: "Chat created successfully",
       chat: { ...chat._doc },
@@ -31,7 +48,7 @@ export const getChats = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const chats = await Chats.find({ userId: userId });
+    const chats = await Chats.find({ userId: userId }).sort({ createdAt: -1 });
     res.json({ success: true, chats });
   } catch (error) {}
 };
